@@ -1,0 +1,31 @@
+input, select, textarea {
+  border-bottom: 2px solid var(--gray) !important;
+  border-width: 0 0 2px !important;
+  border-radius: 0px !important;
+  outline: none !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  transition: all 1s linear;
+  border-color: var(--teal) !important;
+}
+
+*:focus {
+  box-shadow: none !important;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: linear-gradient(65deg, #F4D03F 0%, #16A085 100%);
+}
+
