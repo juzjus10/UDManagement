@@ -15,7 +15,6 @@
 	$values_sum = mysqli_fetch_assoc($result_sum);
     $total_salary = $values_sum['salary'];
     
-    
 ?>
 <!DOCTYPE html>
 <html>
@@ -98,7 +97,7 @@
                         <div class="col-lg-7 col-xl-8">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h6 class="text-primary font-weight-bold m-0">Headcount by Department</h6>
+                                    <h6 class="text-primary font-weight-bold m-0">Headcount by Position</h6>
                                     <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
                                         <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
                                             <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
@@ -107,7 +106,11 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-area"><canvas id="headcountChart" ></canvas></div>
+                                    <div class="chart-area">
+                                        <canvas id="headcountChart" >
+
+                                        </canvas>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -123,8 +126,8 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-area" style="height: 280px;"><canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Male&quot;,&quot;Female&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Gender&quot;,&quot;backgroundColor&quot;:[&quot;#fcc963&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;50&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas></div>
-                                    <div class="text-center small mt-4"><span class="mr-2"><i class="fas fa-circle text-primary"></i>&nbsp;Male</span><span class="mr-2"><i class="fas fa-circle text-success"></i>&nbsp;Female</span></div>
+                                    <div class="chart-area" style="height: 280px;"><canvas id="genderChart"></canvas></div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -216,62 +219,91 @@
 
     <script>
        
-         
-    $(document).ready(function(){
-        $.ajax({
-            url: "https://localhost/UDManagement/charts.php",
-            method: "GET",
-            success: function(data) {
-            console.log(data.num);
+       $(document).ready(function() {
+       	$.ajax({
+       		url: "https://localhost/UDManagement/charts.php",
+       		method: "GET",
+       		success: function(res) {
+       			console.log(res);
 
-            
-            }
-        });
-    
-    });
+       			var pos_label = [];
+       			var pos_count = [];
+                var gend_label = [];
+                var gend_count = [];
 
+       			for (var i in res) {
+       				if (res[i].hasOwnProperty('Position')) {
+       					pos_label.push(res[i].Position);
+       					pos_count.push(res[i].position_count);
+       				}
+                       if (res[i].hasOwnProperty('Gender')) {
+                           if (res[i].Gender === "F") {
+                            gend_label.push("Female");
+                           } 
+                           else if (res[i].Gender === "M") {
+                            gend_label.push("Male");
+                           }
+                        
+                        gend_count.push(res[i].gender_count);
+       				}
+
+
+       			}
+                
+                // HEADCOUNT CHART 
+       			const graph_data = {
+       				labels: pos_label,
+       				datasets: [{
+       					label: 'Headcount',
+       					backgroundColor: "#1cc88a",
+       					borderColor: "rgba(78, 115, 223, 1)",
+       					data: pos_count
+       				}],
+
+       			};
+
+
+       			var headchart = $("#headcountChart");
+
+       			var barGraph = new Chart(headchart, {
+       				type: 'bar',
+       				data: graph_data,
+       				options: {
+       					responsive: true,
+       					maintainAspectRatio: false
+       				}
+       			});
+                
+                //GENDER CHART 
+                const pie_data = {
+       				labels: gend_label,
+       				datasets: [{
+       					label: 'Headcount',
+       					backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            ],
+       					data: gend_count 
+       				}],
+
+       			};
+                var genderchart = $("#genderChart");
+
+                var barGraph = new Chart(genderchart, {
+                    type: 'doughnut',
+                    data: pie_data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+
+       		}
+       	});
+
+       });
    
-    const labels = [
-    "Jan",
-         "Feb",
-         "Mar",
-         "Apr",
-         "May",
-         "Jun",
-         "Jul",
-         "Aug"
-        ];
-        const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Headcount',
-            backgroundColor:"rgba(78, 115, 223, 0.05)",
-            borderColor:"rgba(78, 115, 223, 1)",
-            "data":[
-                    "0",
-                    "10",
-                    "50",
-                    "150",
-                    "100",
-                    "200",
-                    "100",
-                    "100"
-                    ],
-        }] ,
-        
-        };
-
-         const config = {
-            type: 'line',
-            data,
-            options: {}
-            }; 
-
-var myChart = new Chart(
-    document.getElementById('headcountChart'),
-    config
-  );
-       
+ 
     
        
     </script>

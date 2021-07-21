@@ -35,7 +35,15 @@ if(isset($_POST['submit'])){
     $trainingdate = $_POST['trainingdate'];
     $traininghours = $_POST['traininghours'];
     $trainingdays = $_POST['trainingdays'];
-
+    //EMPLOYMENT HISTORY
+    $statusemployment = $_POST['statusemployment'];
+    $itemNo = $_POST['itemNo'];
+    $placeassignment = $_POST['placeassignment'];
+    $placeposition = $_POST['placeposition'];
+    $salarygrade = $_POST['salarygrade'];
+    $stepID = $_POST['stepID'];
+    $startdate = $_POST['startdate'];
+    $enddate = $_POST['enddate'];
 
     $sql = "INSERT INTO `employee`(`Employee_No`, `LastName`, `FirstName`, `MiddleName`, `Address`, `Email`, `Birthday`, `Gender`, `Image`)
     VALUES ('$employeeNo', '$lastname', '$firstname', '$middlename', '$address', '$email', '$birthdate', '$gender' , NULL);
@@ -44,7 +52,11 @@ if(isset($_POST['submit'])){
     INSERT INTO seminars(Employee_No,Seminar_Name, Date_Completed, No_of_Hours, No_of_Days)
     VALUES ('$employeeNo','$seminarname', '$seminarhour', '$seminardate', '$seminardays');
     INSERT INTO training(Employee_No,Training_Name, Date_Completed, No_of_Hours, No_of_Days)
-    VALUES ('$employeeNo','$trainingname', '$trainingdate', '$traininghours', '$trainingdays');";
+    VALUES ('$employeeNo','$trainingname', '$trainingdate', '$traininghours', '$trainingdays');
+    INSERT INTO employment_history(Employee_No, Item_No, Salary_Grade, Step_ID, Start_Date, End_Date, Place_of_Assignment, Status_of_Employ_Code, Position_Code)
+    VALUES ('$employeeNo','$itemNo', '$salarygrade', '$stepID', '$startdate', '$enddate', '$placeassignment', '$statusemployment', '$placeposition');
+    INSERT INTO employee_info_vw(Employee_No,`Last Name`, `First Name`, `Middle Name`, `Address`, `Email`, `Birthday`, `Gender`,`Position`, `Employment Status`, `Place of Assignment`)
+    VALUES ('$employeeNo','$lastname', '$firstname', '$middlename', '$address', '$email', '$birthdate', '$gender','$placeposition','$statusemployment','$placeassignment');";
 
 
 
@@ -123,28 +135,40 @@ if(isset($_POST['submit'])){
                                             <th>Name</th>
                                             <th>Address</th>
                                             <th>Email</th>
-                                            <th>Birthday</th>
+                                            <th>Age</th>
                                             <th>Gender</th>
                                             <th>Postion</th>
                                             <th>Employment Status</th>
                                             <th>Place of Assignment</th>
+                                            <th>State</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php
+                                        
                                         while ($rows = $result->fetch_assoc()):?>
                                        
                                             <tr>
+                                                
                                                 <td><?php echo $rows['Employee_No'];?></td>
                                                 <td><?php echo $rows['Last Name'],' ',$rows['First Name'],' ',$rows['Middle Name'];?></td>
                                                 <td><?php echo $rows['Address'];?></td>
                                                 <td><?php echo $rows['Email'];?></td>
-                                                <td><?php echo $rows['Birthday'];?></td>
+                                                <td><?php echo $rows['Age'];?></td>
                                                 <td><?php echo $rows['Gender'];?></td>
                                                 <td><?php echo $rows['Position'];?></td>
                                                 <td><?php echo $rows['Employment Status'];?></td>
                                                 <td><?php echo $rows['Place of Assignment'];?></td>
+                                                <td><?php IF ($rows['Place of Assignment'] = 1)
+                                                          {
+                                                              echo "Active";
+                                                          } 
+                                                          ELSEIF ($rows['Place of Assignment'] = 2) {
+                                                              echo "Dismissed";
+                                                          }
+                                                          
+                                                    ?></td>
                                                 <td class="d-xl-flex justify-content-xl-center"><button class="btn btn-danger" type="delete" data-dismiss="modal">DELETE</button>
                                                 <a class="btn btn-success btn-sm" role="button" href="profile.php"><i class="far fa-edit"></i></a></td>
                                              </tr>
@@ -265,6 +289,48 @@ if(isset($_POST['submit'])){
                                 </div>
                                 <div class="form-row">
                                     <div class="col-xl-4"><label for="trainingdays">No. of Days</label><input class="form-control" type="number" name="trainingdays"></div>
+                                </div>
+                                <section>
+                            <h5 style="color: rgb(51,8,121);font-family: Nunito, sans-serif;"><strong>Employment Information</strong></h5>
+                            </section>
+                            <div class="form-row">
+                                <div class="col-x1-4">
+                                    <div class="form-group"><label for="itemNo"><strong>Item No</strong></label><input class="form-control" type="text" name="itemNo" placeholder="ITEM_001"></div>
+                                </div>
+                                <div class="col-xl-4"><label for="salarygrade"><strong>Salary Grade</strong></label><input class="form-control" type="number" name="salarygrade" placeholder="1"></div>
+                                <div class="col-xl-4"><label for="stepID"><strong>Step ID</strong></label><input class="form-control" type="text" placeholder="2" name="stepID"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-xl-4">
+                                    <div class="form-group"><label for="startdate"><strong>Start Date</strong></label><input class="form-control" type="date" name="startdate"></div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group"><label for="enddate"><strong>End Date</strong></label><input class="form-control" type="date" name="enddate"></div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-xl-4">
+                                    <div class="form-group"><label for="placeassignment"><strong>Place of Assignment</strong></label><select class="form-control" name="placeassignment">
+                                            <option value="Administrative Position" selected="">Administrative Position</option>
+                                            <option value="Faculty Position">Faculty Position</option>
+                                            <option value="Executive Position'">Executive Position'</option>
+                                        </select></div>
+                                </div>
+                                <div class="col-xl-4 offset-xl-0">
+                                    <div class="form-group"><label for="gender"><strong>Status of Employment</strong></label><select class="form-control" name="statusemployment">
+                                            <option value="RegEmp" selected="">Regular Employment</option>
+                                            <option value="ExtemEmp">Extended Temporary Employment</option>
+                                            <option value="PtimeEmp">Part Time Employment</option>
+                                            <option value="TempEmp">Temporary Employment</option>
+                                            <option value="OnCallEmp">On-Call Employment</option>
+                                        </select></div>
+                                </div>
+                                <div class="col-xl-4 offset-xl-0">
+                                    <div class="form-group"><label for="gender"><strong>Position</strong></label><select class="form-control" name="placeposition">
+                                            <option value="AP" selected="">Administrative Position</option>
+                                            <option value="FP">Faculty Position</option>
+                                            <option value="EP">Executive Position</option>
+                                        </select></div>
                                 </div>
                                 </div>
                                 <div class="modal-footer"><button class="btn btn-primary" name="submit" type="submit">Submit</button><button class="btn btn-danger" type="button" data-dismiss="modal">Close</button></div>
