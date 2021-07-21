@@ -1,3 +1,7 @@
+body {
+  overflow: overlay;
+}
+
 input, select, textarea {
   border-bottom: 2px solid var(--gray) !important;
   border-width: 0 0 2px !important;
@@ -15,13 +19,14 @@ input:focus, select:focus, textarea:focus {
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background-color: #F5F5F5;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar {
+  height: 8px;
   width: 8px;
-  background-color: #F5F5F5;
+  color: transparent;
+  
 }
 
 ::-webkit-scrollbar-thumb {

@@ -1,3 +1,22 @@
+<?php
+    $dbServerName = "localhost";
+    $dbUsername = "root";
+    $dbPassword = "";
+    $dbName = "human_resources2.0";
+    $conn = mysqli_connect($dbServerName, $dbUsername, $dbPassword, $dbName); 
+    
+    $sql_count = "SELECT COUNT('Employee No.') AS num FROM vw_headcount";
+	$result_count = mysqli_query($conn, $sql_count);
+	$values_count = mysqli_fetch_assoc($result_count);
+    $num_rows = $values_count['num'];
+
+    $sql_sum = "SELECT SUM(PayRate) AS salary FROM payroll_vw";
+    $result_sum = mysqli_query($conn, $sql_sum);
+	$values_sum = mysqli_fetch_assoc($result_sum);
+    $total_salary = $values_sum['salary'];
+    
+    
+?>
 <!DOCTYPE html>
 <html>
 
@@ -54,7 +73,7 @@
                                     <div class="row align-items-center no-gutters">
                                         <div class="col mr-2">
                                             <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>Total Employees</span></div>
-                                            <div class="text-dark font-weight-bold h5 mb-0"><span>0</span></div>
+                                            <div class="text-dark font-weight-bold h5 mb-0"><span><?php echo $num_rows;?></span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-id-badge fa-2x text-gray-300"></i></div>
                                     </div>
@@ -67,7 +86,7 @@
                                     <div class="row align-items-center no-gutters">
                                         <div class="col mr-2">
                                             <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Salary (monthly)</span></div>
-                                            <div class="text-dark font-weight-bold h5 mb-0"><span>$215,000</span></div>
+                                            <div class="text-dark font-weight-bold h5 mb-0"><span><?php echo "₱" . number_format((float)$total_salary,2,'.',''); ;?></span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
                                     </div>
@@ -88,7 +107,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-area"><canvas data-bss-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Headcount&quot;,&quot;fill&quot;:false,&quot;data&quot;:[&quot;0&quot;,&quot;10&quot;,&quot;50&quot;,&quot;150&quot;,&quot;100&quot;,&quot;200&quot;,&quot;100&quot;,&quot;100&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;position&quot;:&quot;bottom&quot;,&quot;reverse&quot;:false},&quot;title&quot;:{&quot;display&quot;:false,&quot;position&quot;:&quot;top&quot;,&quot;text&quot;:&quot;&quot;},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;beginAtZero&quot;:false,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:true},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;beginAtZero&quot;:false,&quot;padding&quot;:20}}]}}}"></canvas></div>
+                                    <div class="chart-area"><canvas id="headcountChart" ></canvas></div>
                                 </div>
                             </div>
                         </div>
@@ -193,6 +212,69 @@
     <script src="assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
+
+    <script>
+       
+         
+    $(document).ready(function(){
+        $.ajax({
+            url: "https://localhost/UDManagement/charts.php",
+            method: "GET",
+            success: function(data) {
+            console.log(data.num);
+
+            
+            }
+        });
+    
+    });
+
+   
+    const labels = [
+    "Jan",
+         "Feb",
+         "Mar",
+         "Apr",
+         "May",
+         "Jun",
+         "Jul",
+         "Aug"
+        ];
+        const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Headcount',
+            backgroundColor:"rgba(78, 115, 223, 0.05)",
+            borderColor:"rgba(78, 115, 223, 1)",
+            "data":[
+                    "0",
+                    "10",
+                    "50",
+                    "150",
+                    "100",
+                    "200",
+                    "100",
+                    "100"
+                    ],
+        }] ,
+        
+        };
+
+         const config = {
+            type: 'line',
+            data,
+            options: {}
+            }; 
+
+var myChart = new Chart(
+    document.getElementById('headcountChart'),
+    config
+  );
+       
+    
+       
+    </script>
 </body>
 
 </html>
