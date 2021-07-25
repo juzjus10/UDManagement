@@ -1,3 +1,6 @@
+<?php 
+    require_once  "NewDB.php";
+?>
 <!DOCTYPE html>
 <html>
 
@@ -28,8 +31,14 @@
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Welcome to UDManagement</h4>
                                     </div>
-                                    <form class="user">
-                                        <div class="form-group"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Username" name="email"></div>
+                                    <form class="user" action = "login_process.php" method = "POST">
+                                        <?php
+                                            if(isset($_GET['error'])){?>
+                                                <p class = "text-center"> <?php echo $_GET['error'];?></p>
+                                            <?php
+                                            }?>
+                                            
+                                        <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Username" name="username"></div>
                                         <div class="form-group"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">

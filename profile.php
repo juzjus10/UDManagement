@@ -1,5 +1,21 @@
 <?php
 require_once('NewDB.php');
+$mysqli = new mysqli($server,$user,$pass,$db);
+//Employee No. from dashboard.php
+    $employeeNo =  $_GET['employeeNo'] ?? 'EMP001';
+
+    $sql = "SELECT * FROM `employee` 
+    INNER JOIN `educ_attainment` ON `educ_attainment`.`Employee_No` = `employee`.`Employee_No` 
+    INNER JOIN `seminars` ON `seminars`.`Employee_No` = `employee`.`Employee_No`
+    INNER JOIN `training` ON `training`.`Employee_No` = `employee`.`Employee_No`
+    WHERE `employee`.`Employee_No` =  '$employeeNo'";
+    $burat = array();
+
+    $result =  $mysqli->query($sql) or die(mysqli_error($mysqli));
+    $row = mysqli_fetch_array($result);
+  
+        
+    
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,7 +69,7 @@ require_once('NewDB.php');
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Profile (WIP)</h3>
+                    <h3 class="text-dark mb-4">Profile</h3>
                     <div class="row mb-3">
                         <div class="col-lg-4">
                             <div class="card mb-3">
@@ -104,28 +120,28 @@ require_once('NewDB.php');
                                                 <section></section>
                                                 <div class="form-row">
                                                     <div class="col">
-                                                        <div class="form-group"><label for="employeeNo"><strong>Employee No</strong></label><input class="form-control" type="text" id="username" name="employeeNo" placeholder="EMP001"></div>
+                                                        <div class="form-group"><label for="employeeNo"><strong>Employee No</strong></label><input class="form-control" type="text" id="username" name="employeeNo" values = "<?php $row['Employee_No'] ?> "placeholder="<?php echo $row['Employee_No'];?>"></div>
                                                     </div>
                                                     <div class="col">
-                                                        <div class="form-group"><label for="firstname"><strong>First Name</strong></label><input class="form-control" type="email" id="email" placeholder="Juan" name="firstname"></div>
+                                                        <div class="form-group"><label for="firstname"><strong>First Name</strong></label><input class="form-control" type="email" id="email" values = "<?php $row['FirstName'] ?> "placeholder="<?php echo $row['FirstName'];?>" name="firstname"></div>
                                                     </div>
-                                                    <div class="col"><label for="firstname"><strong>Middle Name</strong></label><input class="form-control" type="email" id="email-1" placeholder="Arkon" name="middlename"></div>
+                                                    <div class="col"><label for="firstname"><strong>Middle Name</strong></label><input class="form-control" type="email" id="email-1" values = "<?php $row['MiddleName'] ?> "placeholder="<?php echo $row['MiddleName'];?>" name="middlename"></div>
                                                 </div>
                                                 <div class="form-row">
-                                                    <div class="col"><label for="lastname"><strong>Last Name</strong></label><input class="form-control" type="text" placeholder="Dela Cruz" name="lastname"></div>
+                                                    <div class="col"><label for="lastname"><strong>Last Name</strong></label><input class="form-control" type="text" values = "<?php $row['LastName'] ?> "placeholder="<?php echo $row['LastName'];?>"name="lastname"></div>
                                                     <div class="col">
-                                                        <div class="form-group"><label for="address"><strong>Address</strong></label><input class="form-control" type="text" id="first_name" placeholder="N. Zamora Street Tondo" name="address"></div>
+                                                        <div class="form-group"><label for="address"><strong>Address</strong></label><input class="form-control" type="text" id="address" values = "<?php $row['Address'] ?> "placeholder="<?php echo $row['Address'];?>"  name="address"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="col-xl-5">
-                                                        <div class="form-group"><label for="email"><strong>Email</strong></label><input class="form-control" type="text" id="last_name" placeholder="johnnydogs@gmail.com" name="email"></div>
+                                                        <div class="form-group"><label for="email"><strong>Email</strong></label><input class="form-control" type="text" id="email" values = "<?php $row['Email'] ?> "placeholder="<?php echo $row['Email'];?>" name="email"></div>
                                                     </div>
                                                     <div class="col-xl-4">
-                                                        <div class="form-group"><label for="birthdate"><strong>Birthdate</strong></label><input class="form-control" type="date" name="birthdate"></div>
+                                                        <div class="form-group"><label for="birthdate"><strong>Birthdate</strong></label><input class="form-control" type="date" values = "<?php $row['Birthday'] ?> "placeholder="<?php echo $row['Birthday'];?>" name="birthdate"></div>
                                                     </div>
                                                     <div class="col-xl-3 offset-xl-0">
-                                                        <div class="form-group"><label for="gender"><strong>Gender</strong></label><select class="form-control">
+                                                        <div class="form-group"><label for="gender"><strong>Gender</strong></label><select class="form-control" values = "<?php $row['Gender'] ?> "placeholder="<?php echo $row['Gender'];?>">
                                                                 <option value="M" selected="">Male</option>
                                                                 <option value="F">Female</option>
                                                             </select></div>
@@ -146,7 +162,7 @@ require_once('NewDB.php');
                                                 <div class="form-group">
                                                     <div class="form-row">
                                                         <div class="col-xl-6">
-                                                            <div class="form-group"><label for="degree"><strong>Degree</strong></label><select class="form-control" name="degree">
+                                                            <div class="form-group"><label for="degree"><strong>Degree</strong></label><select class="form-control" values = "<?php $row['Degree_Code'] ?> "placeholder="<?php echo $row['Degree_Code'];?>" name="degree">
                                                                     <option value="MAED" selected="">Master of Arts in Education</option>
                                                                     <option value="DCS">Doctor of Computer Science</option>
                                                                     <option value="MA-PHIL">Master of Arts in Philosopy</option>
@@ -164,11 +180,11 @@ require_once('NewDB.php');
                                                                     <option value="BSOA">Bachelor of Science in Office Administration</option>
                                                                 </select></div>
                                                         </div>
-                                                        <div class="col-xl-6 offset-xl-0"><label for="birthdate"><strong>School Graduated</strong><br></label><input class="form-control" type="text" id="first_name-1" placeholder="Philippine Christian University" name="schoolgraduated"></div>
+                                                        <div class="col-xl-6 offset-xl-0"><label for="schoolgraduated"><strong>School Graduated</strong><br></label><input class="form-control" type="text" id="first_name-1" values = "<?php $row['School_Graduated']; ?> "placeholder="<?php echo $row['School_Graduated'];?>" name="schoolgraduated"></div>
                                                     </div>
                                                     <div class="form-row" style="border-bottom-color: rgb(133, 135, 150);">
                                                         <div class="col-xl-3">
-                                                            <div class="form-group"><label for="degree"><strong>Year Graduated</strong></label><input class="form-control" type="number" min="1900" name="yeargraduated" placeholder="2000"></div>
+                                                            <div class="form-group"><label for="yeargraduated"><strong>Year Graduated</strong></label><input class="form-control" type="number" min="1900" name="yeargraduated" values = "<?php $row['Year_Graduated']; ?> "placeholder="<?php echo $row['Year_Graduated'];?>"></div>
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
@@ -192,12 +208,12 @@ require_once('NewDB.php');
                                     <form>
                                         <div class="form-group">
                                             <div class="form-row">
-                                                <div class="col-xl-6"><label for="seminarname">Seminar Name</label><input class="form-control" type="text" name="seminarname"></div>
-                                                <div class="col-xl-6"><label for="seminarhour">No. of Hours</label><input class="form-control" type="number" name="seminarhour"></div>
+                                                <div class="col-xl-6"><label for="seminarname">Seminar Name</label><input class="form-control" type="text" values = "<?php $row['Seminar_Name'] ?> "placeholder="<?php echo $row['Seminar_Name'];?>" name="seminarname"></div>
+                                                <div class="col-xl-6"><label for="seminarhour">No. of Hours</label><input class="form-control" type="number" values = "<?php $row['No_of_Hours'] ?> "placeholder="<?php echo $row['No_of_Hours'];?>" name="seminarhour"></div>
                                             </div>
                                             <div class="form-row" style="border-bottom-color: rgb(133, 135, 150);">
-                                                <div class="col-xl-6"><label for="seminardate">Date Completed</label><input class="form-control" type="date" name="seminardate"></div>
-                                                <div class="col-xl-6"><label for="seminardays">No. of Days</label><input class="form-control" type="number" name="seminardays"></div>
+                                                <div class="col-xl-6"><label for="seminardate">Date Completed</label><input class="form-control" type="date" values = "<?php $row['Date_Completed'] ?> "placeholder="<?php echo $row['Date_Completed'];?>" name="seminardate"></div>
+                                                <div class="col-xl-6"><label for="seminardays">No. of Days</label><input class="form-control" type="number" values = "<?php $row['No_of_Days'] ?> "placeholder="<?php echo $row['No_of_Days'];?>" name="seminardays"></div>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -217,12 +233,12 @@ require_once('NewDB.php');
                                         <div class="form-group">
                                             <section></section>
                                             <div class="form-row">
-                                                <div class="col-lg-12 col-xl-6"><label for="trainingname">Training Name</label><input class="form-control" type="text" name="trainingname"></div>
-                                                <div class="col-xl-6"><label for="trainingdate">Date Completed</label><input class="form-control" type="date" name="trainingdate"></div>
+                                                <div class="col-lg-12 col-xl-6"><label for="trainingname">Training Name</label><input class="form-control" type="text" values = "<?php $row['Training_Name'] ?> "placeholder="<?php echo $row['Training_Name'];?>" name="trainingname"></div>
+                                                <div class="col-xl-6"><label for="trainingdate">Date Completed</label><input class="form-control" type="date" values = "<?php $row['Date_Completed'] ?> "placeholder="<?php echo $row['Date_Completed'];?>" name="trainingdate"></div>
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-xl-6"><label for="trainingdays">No. of Days</label><input class="form-control" type="number" name="trainingdays"></div>
-                                                <div class="col"><label for="traininghours">No. of Hours</label><input class="form-control" type="number" name="traininghours"></div>
+                                                <div class="col-xl-6"><label for="trainingdays">No. of Days</label><input class="form-control" type="number" values = "<?php $row['No_of_Days'] ?> "placeholder="<?php echo $row['No_of_Days'];?>" name="trainingdays"></div>
+                                                <div class="col"><label for="traininghours">No. of Hours</label><input class="form-control" type="number" values = "<?php $row['No_of_Hours'] ?> "placeholder="<?php echo $row['No_of_Hours'];?>"name="traininghours"></div>
                                             </div>
                                         </div>
                                         <div class="form-row">

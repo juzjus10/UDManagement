@@ -1,12 +1,14 @@
 <?php
 require_once('NewDB.php');
 $mysqli = new mysqli($server,$user,$pass,$db);
-$result = $mysqli->query("SELECT * FROM employee_info_vw") or die(mysqli_error($mysqli));
 if ($mysqli -> connect_errno) {
     echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
     exit();
-  }
+}
 
+$result = $mysqli->query("SELECT * FROM employee_info_vw") or die(mysqli_error($mysqli));
+
+//CREATE 
 if(isset($_POST['submit'])){
 
     //EMPLOYEE INFO
@@ -58,16 +60,23 @@ if(isset($_POST['submit'])){
     INSERT INTO employee_info_vw(Employee_No,`Last Name`, `First Name`, `Middle Name`, `Address`, `Email`, `Birthday`, `Gender`,`Position`, `Employment Status`, `Place of Assignment`)
     VALUES ('$employeeNo','$lastname', '$firstname', '$middlename', '$address', '$email', '$birthdate', '$gender','$placeposition','$statusemployment','$placeassignment');";
 
-
-
-        if (mysqli_multi_query($mysqli,$sql)) {
-            echo '<div class="alert alert-success" role="alert">';
-            echo 'New Employee Added';
-            echo '</div>';
-        } else {
-            echo "Error: " . mysqli_error($mysqli);
-        }
+    if (mysqli_multi_query($mysqli,$sql)) {
+        echo '<div class="alert alert-success" role="alert">';
+        echo 'New Employee Added';
+        echo '</div>';
+    } else {
+        echo "Error: " . mysqli_error($mysqli);
+    }
 }
+//DELETE 
+if(isset($_POST['empDelete'])){
+    
+    $empDelete =  $_POST['empDelete'];
+
+    $query = "UPDATE `employee` SET Employee_State = 2  WHERE `employee`.`Employee_No` ='" . $empDelete . "'"  ;
+    //echo $query;
+     $mysqli->query($query)or die(mysqli_error($mysqli));
+ }
 ?>
 
 <!DOCTYPE html>
@@ -160,18 +169,24 @@ if(isset($_POST['submit'])){
                                                 <td><?php echo $rows['Position'];?></td>
                                                 <td><?php echo $rows['Employment Status'];?></td>
                                                 <td><?php echo $rows['Place of Assignment'];?></td>
-                                                <td><?php IF ($rows['Place of Assignment'] = 1)
+                                                <td><?php IF ($rows['State'] ==1)
                                                           {
                                                               echo "Active";
                                                           } 
-                                                          ELSEIF ($rows['Place of Assignment'] = 2) {
+                                                          ELSEIF ($rows['State'] == 2) {
                                                               echo "Dismissed";
                                                           }
                                                           
                                                     ?></td>
-                                                <td class="d-xl-flex justify-content-xl-center"><button class="btn btn-danger" type="delete" data-dismiss="modal">DELETE</button>
-                                                <a class="btn btn-success btn-sm" role="button" href="profile.php"><i class="far fa-edit"></i></a></td>
-                                             </tr>
+                                                <td class="d-xl-flex justify-content-xl-center">
+                                                <form action="" method="post">
+                                                    <button class="btn btn-danger" name="empDelete" type="submit"  value="<?php echo $rows['Employee_No'];?>">DELETE</button>
+                                                </form>
+                                                <form action="profile.php">
+                                                    <button class="btn btn-success btn-sm" name="employeeNo" type="submit" value="<?php echo $rows['Employee_No'];?>">
+                                                    <i class="far fa-edit"></i></button></td>
+                                                </form>          
+                                            </tr>
                                         <?php endwhile ?>
                                     </tbody>
                                     <tfoot>
@@ -290,6 +305,7 @@ if(isset($_POST['submit'])){
                                 <div class="form-row">
                                     <div class="col-xl-4"><label for="trainingdays">No. of Days</label><input class="form-control" type="number" name="trainingdays"></div>
                                 </div>
+                                <hr>
                                 <section>
                             <h5 style="color: rgb(51,8,121);font-family: Nunito, sans-serif;"><strong>Employment Information</strong></h5>
                             </section>
@@ -367,7 +383,8 @@ if(isset($_POST['submit'])){
                 dom: 'fBrtlip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
-                ] 
+                ],
+                "order": [[ 9, 'asc' ], [ 0, 'asc' ] ]
             });
     } );
     </script>
