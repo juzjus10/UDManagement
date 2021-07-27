@@ -52,7 +52,7 @@ if(isset($_POST['submit'])){
     $mysqli->query($sql) or die(mysqli_error($mysqli));
     $sql1 = "INSERT INTO educ_attainment(Employee_No,Degree_Code, Year_Graduated, School_Graduated) VALUES ('$employeeNo', '$degree',  '$yeargraduated', '$schoolgraduated');";
     $mysqli->query($sql1) or die(mysqli_error($mysqli));
-    $sql2 = "INSERT INTO seminars(Employee_No,Seminar_Name, Sem_Date_Completed, Sem_No_of_Hours, Sem_No_of_Days) VALUES ('$employeeNo','$seminarname', '$seminarhour', '$seminardate', '$seminardays');";
+    $sql2 = "INSERT INTO seminars(Employee_No,Seminar_Name, Sem_Date_Completed, Sem_No_of_Hours, Sem_No_of_Days) VALUES ('$employeeNo','$seminarname','$seminardate', '$seminarhour' , '$seminardays');";
     $mysqli->query($sql2) or die(mysqli_error($mysqli));
     $sql3 = "INSERT INTO training(Employee_No,Training_Name, Tra_Date_Completed, Tra_No_of_Hours, Tra_No_of_Days) VALUES ('$employeeNo','$trainingname', '$trainingdate', '$traininghours', '$trainingdays');";
     $mysqli->query($sql3) or die(mysqli_error($mysqli));
