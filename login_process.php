@@ -1,4 +1,5 @@
 <?php 
+    ob_start();
     session_start();
     include "NewDB.php";
     if (isset($_POST['username']) && isset($_POST['password']))

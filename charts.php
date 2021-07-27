@@ -1,10 +1,7 @@
 <?php
     header('Content-Type: application/json');
-    $dbServerName = "localhost";
-    $dbUsername = "root";
-    $dbPassword = "";
-    $dbName = "human_resources2.0";
-    $conn = mysqli_connect($dbServerName, $dbUsername, $dbPassword, $dbName); 
+    require_once('NewDB.php');
+    $conn = new mysqli($server,$user,$pass,$db);
     
     $query = "SELECT `Position`, COUNT(`Position`)  AS position_count  FROM `employee_info_vw`  GROUP BY `position`";
     $result= mysqli_query($conn, $query);

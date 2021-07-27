@@ -6,6 +6,7 @@ if ($mysqli -> connect_errno) {
     exit();
 }
 
+
 $result = $mysqli->query("SELECT * FROM employee_info_vw") or die(mysqli_error($mysqli));
 
 //CREATE 
@@ -47,26 +48,18 @@ if(isset($_POST['submit'])){
     $startdate = $_POST['startdate'];
     $enddate = $_POST['enddate'];
 
-    $sql = "INSERT INTO `employee`(`Employee_No`, `LastName`, `FirstName`, `MiddleName`, `Address`, `Email`, `Birthday`, `Gender`, `Image`)
-    VALUES ('$employeeNo', '$lastname', '$firstname', '$middlename', '$address', '$email', '$birthdate', '$gender' , NULL);
-    INSERT INTO educ_attainment(Employee_No,Degree_Code, Year_Graduated, School_Graduated)
-    VALUES ('$employeeNo', '$degree', '$schoolgraduated', '$yeargraduated');
-    INSERT INTO seminars(Employee_No,Seminar_Name, Date_Completed, No_of_Hours, No_of_Days)
-    VALUES ('$employeeNo','$seminarname', '$seminarhour', '$seminardate', '$seminardays');
-    INSERT INTO training(Employee_No,Training_Name, Date_Completed, No_of_Hours, No_of_Days)
-    VALUES ('$employeeNo','$trainingname', '$trainingdate', '$traininghours', '$trainingdays');
-    INSERT INTO employment_history(Employee_No, Item_No, Salary_Grade, Step_ID, Start_Date, End_Date, Place_of_Assignment, Status_of_Employ_Code, Position_Code)
-    VALUES ('$employeeNo','$itemNo', '$salarygrade', '$stepID', '$startdate', '$enddate', '$placeassignment', '$statusemployment', '$placeposition');
-    INSERT INTO employee_info_vw(Employee_No,`Last Name`, `First Name`, `Middle Name`, `Address`, `Email`, `Birthday`, `Gender`,`Position`, `Employment Status`, `Place of Assignment`)
-    VALUES ('$employeeNo','$lastname', '$firstname', '$middlename', '$address', '$email', '$birthdate', '$gender','$placeposition','$statusemployment','$placeassignment');";
-
-    if (mysqli_multi_query($mysqli,$sql)) {
-        echo '<div class="alert alert-success" role="alert">';
-        echo 'New Employee Added';
-        echo '</div>';
-    } else {
-        echo "Error: " . mysqli_error($mysqli);
-    }
+    $sql = "INSERT INTO `employee`(`Employee_No`, `LastName`, `FirstName`, `MiddleName`, `Address`, `Email`, `Birthday`, `Gender`, `Image`) VALUES ('$employeeNo', '$lastname', '$firstname', '$middlename', '$address', '$email', '$birthdate', '$gender' , NULL);";
+    $mysqli->query($sql) or die(mysqli_error($mysqli));
+    $sql1 = "INSERT INTO educ_attainment(Employee_No,Degree_Code, Year_Graduated, School_Graduated) VALUES ('$employeeNo', '$degree',  '$yeargraduated', '$schoolgraduated');";
+    $mysqli->query($sql1) or die(mysqli_error($mysqli));
+    $sql2 = "INSERT INTO seminars(Employee_No,Seminar_Name, Sem_Date_Completed, Sem_No_of_Hours, Sem_No_of_Days) VALUES ('$employeeNo','$seminarname', '$seminarhour', '$seminardate', '$seminardays');";
+    $mysqli->query($sql2) or die(mysqli_error($mysqli));
+    $sql3 = "INSERT INTO training(Employee_No,Training_Name, Tra_Date_Completed, Tra_No_of_Hours, Tra_No_of_Days) VALUES ('$employeeNo','$trainingname', '$trainingdate', '$traininghours', '$trainingdays');";
+    $mysqli->query($sql3) or die(mysqli_error($mysqli));
+    $sql4 = "INSERT INTO employment_history(Employee_No, Item_No, Salary_Grade, Step_ID, Start_Date, End_Date, Place_of_Assignment, Status_of_Employ_Code, Position_Code) VALUES ('$employeeNo','$itemNo', '$salarygrade', '$stepID', '$startdate', '$enddate', '$placeassignment', '$statusemployment', '$placeposition');";
+    $mysqli->query($sql4) or die(mysqli_error($mysqli));
+    
+    $result = $mysqli->query("SELECT * FROM employee_info_vw") or die(mysqli_error($mysqli));
 }
 //DELETE 
 if(isset($_POST['empDelete'])){
@@ -182,7 +175,7 @@ if(isset($_POST['empDelete'])){
                                                 <form action="" method="post">
                                                     <button class="btn btn-danger" name="empDelete" type="submit"  value="<?php echo $rows['Employee_No'];?>">DELETE</button>
                                                 </form>
-                                                <form action="profile.php">
+                                                <form action="updateEmployee.php">
                                                     <button class="btn btn-success btn-sm" name="employeeNo" type="submit" value="<?php echo $rows['Employee_No'];?>">
                                                     <i class="far fa-edit"></i></button></td>
                                                 </form>          
@@ -257,7 +250,7 @@ if(isset($_POST['empDelete'])){
                                 <div class="form-row">
                                     <div class="col-xl-6">
                                         <div class="form-group"><label for="degree"><strong>Degree</strong></label><select class="form-control" name="degree">
-                                                <option value="MAED" selected="">Master of Arts in Education</option>
+                                                <option value="MAED">Master of Arts in Education</option>
                                                 <option value="DCS">Doctor of Computer Science</option>
                                                 <option value="MA-PHIL">Master of Arts in Philosopy</option>
                                                 <option value="MSCS">Master of Science in Computer Science</option>
@@ -274,11 +267,11 @@ if(isset($_POST['empDelete'])){
                                                 <option value="BSOA">Bachelor of Science in Office Administration</option>
                                             </select></div>
                                     </div>
-                                    <div class="col-xl-6 offset-xl-0"><label for="birthdate"><strong>School Graduated</strong><br></label><input class="form-control" type="text" id="first_name-1" placeholder="Philippine Christian University" name="schoolgraduated"></div>
+                                    <div class="col-xl-6 offset-xl-0"><label for="schoolgraduated"><strong>School Graduated</strong><br></label><input class="form-control" type="text" id="first_name-1" placeholder="Philippine Christian University" name="schoolgraduated"></div>
                                 </div>
                                 <div class="form-row" style="border-bottom-color: rgb(133, 135, 150);">
                                     <div class="col-xl-3">
-                                        <div class="form-group"><label for="degree"><strong>Year Graduated</strong></label><input class="form-control" type="number" min="1900" name="yeargraduated" placeholder="2000"></div>
+                                        <div class="form-group"><label for="yeargraduated"><strong>Year Graduated</strong></label><input class="form-control" type="number" min="1900" name="yeargraduated" placeholder="2000"></div>
                                     </div>
                                 </div>
                                 <hr>

@@ -221,7 +221,7 @@
        
        $(document).ready(function() {
        	$.ajax({
-       		url: "https://localhost/UDManagement/charts.php",
+       		url: "charts.php",
        		method: "GET",
        		success: function(res) {
        			console.log(res);
@@ -269,6 +269,13 @@
        				type: 'bar',
        				data: graph_data,
        				options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        },
        					responsive: true,
        					maintainAspectRatio: false
        				}
