@@ -7,16 +7,12 @@ $mysqli = new mysqli($server,$user,$pass,$db);
     $employeeNo = $_SESSION["employeeNo"];
     $resultsem = $mysqli->query("SELECT * FROM seminars where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
     $resulttra = $mysqli->query("SELECT * FROM training where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
-
-
+    $image = $mysqli->query("SELECT image FROM employee where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
+    $image = mysqli_fetch_array($image);
     if (empty($employeeNo)){
         $employeeNo = 'EMP001';
      }
-    
-
-  
-
-    
+   
     function fetch_data($mysqli, $employeeNo) {
         $sql = "SELECT * FROM `employee` 
         INNER JOIN `educ_attainment` ON `educ_attainment`.`Employee_No` = `employee`.`Employee_No` 
@@ -191,9 +187,18 @@ if(isset($_POST['semDelete'])){
                     <div class="row mb-3">
                         <div class="col-lg-4">
                             <div class="card mb-3">
-                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="assets/img/dogs/image2.jpeg" width="160" height="160">
-                                    <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button></div>
+                                <div class="card-body text-center shadow">
+                                    <form action="upload.php" id= "uploadPicture" method="post" enctype="multipart/form-data">
+                                    <label for="fileToUpload">
+                                    <div class="profile-pic" style="background-image: url('<?php if ($row['Image']==0) { echo htmlspecialchars('assets/img/dogs/image2.jpeg') ; } else echo $row['Image'];?>')">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Change Image</span>
+                                    </div>
+                                    </label>
+                                    <input type="File" name="fileToUpload" id="fileToUpload">
+                                    </form>
                                 </div>
+                               
                             </div>
                         </div>
                         <div class="col-lg-8">
@@ -499,6 +504,11 @@ if(isset($_POST['semDelete'])){
     <script src="assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script>
+        document.getElementById("fileToUpload").onchange = function() {
+            document.getElementById("uploadPicture").submit();
+        };
+    </script>
 </body>
 
 </html>
