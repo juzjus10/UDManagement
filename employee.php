@@ -173,11 +173,13 @@ if(isset($_POST['empDelete'])){
                                                     ?></td>
                                                 <td class="d-xl-flex justify-content-xl-center">
                                                 <form action="" method="post">
-                                                    <button class="btn btn-danger" name="empDelete" type="submit"  value="<?php echo $rows['Employee_No'];?>">DELETE</button>
+                                                    <button class="btn btn-circle btn-danger mr-1" name="empDelete" type="submit"  value="<?php echo $rows['Employee_No'];?>">
+                                                    <i class="far fa-trash-alt fa-fw"></i></button>
                                                 </form>
                                                 <form action="updateEmployee.php">
-                                                    <button class="btn btn-success btn-sm" name="employeeNo" type="submit" value="<?php echo $rows['Employee_No'];?>">
-                                                    <i class="far fa-edit"></i></button></td>
+                                                    <button class="btn btn-circle btn-success mr-1"  name="employeeNo" type="submit" value="<?php echo $rows['Employee_No'];?>">
+                                                    <i class=" far fa-edit fa-fw"></i></button>
+                                                </td>
                                                 </form>          
                                             </tr>
                                         <?php endwhile ?>
@@ -193,6 +195,7 @@ if(isset($_POST['empDelete'])){
                                             <th>Postion</th>
                                             <th>Employment Status</th>
                                             <th>Place of Assignment</th>
+                                            <th>State</th>
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>                                    
@@ -358,6 +361,7 @@ if(isset($_POST['empDelete'])){
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/chart.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/theme.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/jquery.dataTables.min.js"> </script>
     <script src="assets/js/dataTables.bootstrap4.min.js"> </script>

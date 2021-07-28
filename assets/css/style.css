@@ -2,14 +2,23 @@ body {
   overflow: overlay;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   border-bottom: 2px solid var(--gray) !important;
   border-width: 0 0 2px !important;
   border-radius: 0px !important;
   outline: none !important;
 }
 
-input:focus, select:focus, textarea:focus {
+th {
+  border-bottom: 2px solid var(--gray) !important;
+  border-top: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
   transition: all 1s linear;
   border-color: var(--teal) !important;
 }
@@ -26,11 +35,9 @@ input:focus, select:focus, textarea:focus {
   height: 8px;
   width: 8px;
   color: transparent;
-  
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-image: linear-gradient(65deg, #F4D03F 0%, #16A085 100%);
+  background-image: linear-gradient(65deg, #f4d03f 0%, #16a085 100%);
 }
-

@@ -5,14 +5,16 @@ $mysqli = new mysqli($server,$user,$pass,$db);
     session_start();  
 
     $employeeNo = $_SESSION["employeeNo"];
-    
+    $resultsem = $mysqli->query("SELECT * FROM seminars where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
+    $resulttra = $mysqli->query("SELECT * FROM training where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
+
 
     if (empty($employeeNo)){
         $employeeNo = 'EMP001';
      }
     
 
-    echo $employeeNo;
+  
 
     
     function fetch_data($mysqli, $employeeNo) {
@@ -67,11 +69,13 @@ if (isset($_POST['UpSem'])){
     $seminarhour = $_POST['seminarhour']; 
     $seminardays = $_POST['seminardays']; 
 
-    $mysqli->query("UPDATE seminars SET Employee_No='$employeeNo', Seminar_Name='$seminarname', Sem_Date_Completed='$seminardate', 
-    Sem_No_of_Hours='$seminarhour', Sem_No_of_Days='$seminardays' WHERE Employee_No='$employeeNo'") or 
+    $mysqli->query("INSERT INTO seminars(Employee_No,Seminar_Name, Sem_Date_Completed, Sem_No_of_Hours, Sem_No_of_Days) 
+    VALUES ('$employeeNo','$seminarname','$seminardate', '$seminarhour' , '$seminardays')") or 
         die($mysqli->error);
     $row = fetch_data ($mysqli, $employeeNo);
-  
+    $resultsem = $mysqli->query("SELECT * FROM seminars where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
+
+    
 }
 //Update Training
 if (isset($_POST['UpTra'])){
@@ -80,12 +84,13 @@ if (isset($_POST['UpTra'])){
     $trainingdays = $_POST['trainingdays']; 
     $traininghours = $_POST['traininghours']; 
 
-    $mysqli->query("UPDATE training SET Employee_No='$employeeNo', Training_Name='$trainingname', Tra_Date_Completed='$trainingdate', 
-    Tra_No_of_Hours='$traininghours', Tra_No_of_Days='$trainingdays' WHERE Employee_No='$employeeNo'") or 
+    $mysqli->query("INSERT INTO training(Employee_No,Training_Name, Tra_Date_Completed, Tra_No_of_Hours, Tra_No_of_Days) 
+    VALUES ('$employeeNo','$trainingname', '$trainingdate', '$traininghours', '$trainingdays');") or 
         die($mysqli->error);
 
     $row = fetch_data ($mysqli, $employeeNo);
-    
+    $resulttra = $mysqli->query("SELECT * FROM training where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
+
 }
 
 //Update EMPLOYMENT HISTORY
@@ -109,6 +114,26 @@ if (isset($_POST['UpEmh'])){
     $row = fetch_data ($mysqli, $employeeNo);
  
 }
+
+if(isset($_POST['semDelete'])){
+    
+    $semDelete =  $_POST['semDelete'];
+
+    $query = "DELETE FROM Seminars WHERE Seminar_Name = '$semDelete' and Employee_No ='$employeeNo'";
+    //echo $query;
+    $mysqli->query($query)or die(mysqli_error($mysqli));
+    header("Location: profile.php");
+ }
+
+ if(isset($_POST['traDelete'])){
+    
+    $traDelete =  $_POST['traDelete'];
+
+    $query = "DELETE FROM Training WHERE Training_Name = '$traDelete' and Employee_No ='$employeeNo'";
+    //echo $query;
+    $mysqli->query($query)or die(mysqli_error($mysqli));
+    header("Location: profile.php");
+ }
 ?>
 <!DOCTYPE html>
 <html>
@@ -313,10 +338,38 @@ if (isset($_POST['UpEmh'])){
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpSem">Save&nbsp;</button></div>
+                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpSem">Add&nbsp;</button></div>
                                         </div>
                                     </form>
+                                    <div class="card-body">
+                                        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                            <table id="seminars" class="table my-0" >
+                                                <thead>
+                                                <tr>
+                                                    <th>Current Seminars:</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                
+                                                <tbody>
+                                            <?php
+                                            
+                                            while ($rows = $resultsem->fetch_assoc()):?>
+                                        
+                                                <tr>
+                                                    
+                                                    <td><?php echo $rows['Seminar_Name'];?></td>
+                                                    <td><form action="" method="post">
+                                                    <button class="btn btn-circle btn-danger" name="semDelete" type="submit"  value="<?php echo $rows['Seminar_Name'];?>"><i class="far fa-trash-alt"></i></button>
+                                                </form></td>
+                                                </tr>
+                                                </tbody>
+                                            <?php endwhile ?>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
+                                
                             </div>
                         </div>
                         <div class="col">
@@ -330,17 +383,42 @@ if (isset($_POST['UpEmh'])){
                                             <section></section>
                                             <div class="form-row">
                                                 <div class="col-lg-12 col-xl-6"><label for="trainingname">Training Name</label><input class="form-control" type="text" value = "<?php echo $row['Training_Name'] ?> "placeholder="<?php echo $row['Training_Name'];?>" name="trainingname"></div>
-                                                <div class="col-xl-6"><label for="trainingdays">No. of Days</label><input class="form-control" type="text" onfocus="(this.type='number')" onblur="(this.type='text')" value = "<?php echo $row['Tra_No_of_Days'] ?> "placeholder="<?php echo $row['Tra_No_of_Days'];?>" name="trainingdays"></div>
+                                                <div class="col"><label for="traininghours">No. of Hours</label><input class="form-control" type="text" onfocus="(this.type='number')" onblur="(this.type='text')" value = "<?php echo $row['Tra_No_of_Hours'] ?> "placeholder="<?php echo $row['Tra_No_of_Hours'];?>"name="traininghours"></div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-xl-6"><label for="trainingdate">Date Completed</label><input class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" value = "<?php echo $row['Tra_Date_Completed'] ?> "placeholder="<?php echo $row['Tra_Date_Completed'];?>" name="trainingdate"></div>
-                                                <div class="col"><label for="traininghours">No. of Hours</label><input class="form-control" type="text" onfocus="(this.type='number')" onblur="(this.type='text')" value = "<?php echo $row['Tra_No_of_Hours'] ?> "placeholder="<?php echo $row['Tra_No_of_Hours'];?>"name="traininghours"></div>
+                                                   <div class="col-xl-6"><label for="trainingdays">No. of Days</label><input class="form-control" type="text" onfocus="(this.type='number')" onblur="(this.type='text')" value = "<?php echo $row['Tra_No_of_Days'] ?> "placeholder="<?php echo $row['Tra_No_of_Days'];?>" name="trainingdays"></div>  
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpTra">Save&nbsp;</button></div>
+                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpTra">Add&nbsp;</button></div>
                                         </div>
                                     </form>
+                                    <div class="card-body">
+                                        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                            <table id="seminars" class="table my-0" >
+                                                <thead>
+                                                <tr>
+                                                    <th>Current Trainings:</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                            <?php
+                                            
+                                            while ($rows = $resulttra->fetch_assoc()):?>
+                                        
+                                                <tr>
+                                                    <td><?php echo $rows['Training_Name'];?></td>
+                                                    <td><form action="" method="post">
+                                                    <button class="btn btn-circle  btn-danger" name="traDelete" type="submit"  value="<?php echo $rows['Training_Name'];?>"><i class="far fa-trash-alt"></i></button>
+                                                    </form></td>
+                                                </tr>
+                                                </tbody>
+                                            <?php endwhile ?>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
