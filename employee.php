@@ -1,5 +1,8 @@
 <?php
 require_once('NewDB.php');
+
+session_start();
+    if(isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 $mysqli = new mysqli($server,$user,$pass,$db);
 if ($mysqli -> connect_errno) {
     echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
@@ -101,7 +104,7 @@ if(isset($_POST['empDelete'])){
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="employee.php"><i class="fas fa-table"></i><span>Employees</span></a><a class="nav-link" href="payroll.php"><i class="fa fa-credit-card-alt"></i><span>Payroll</span></a><a class="nav-link" href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.php"><i class="far fa-user-circle"></i><span>Login</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout_process.php"><i class="far fa-user-circle"></i><span>Logout</span></a></li>
                    
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
@@ -113,16 +116,18 @@ if(isset($_POST['empDelete'])){
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars" style="color: rgb(255,255,255);"></i></button>
                         <ul class="navbar-nav flex-nowrap ml-auto">
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small" style="color: rgb(255,255,255) !important;">Admin</span><img class="border rounded-circle img-profile" src="assets/img/dogs/image2.jpeg"></a>
-                                    <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small" style="color: rgb(255,255,255) !important;"><?php echo $_SESSION['Name'] ?></span><img class="border rounded-circle img-profile" src="assets/img/dogs/image2.jpeg"></a>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="profile.php"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="logout_process.php"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </nav>
-                <div class="container-fluid"><button class="btn btn-primary btn-sm float-right" type="button" data-toggle="modal" data-target="#addEmployee" style="background: rgb(111,66,193);">Add Employee</button>
+                <div class="container-fluid">
+                    <button class="btn btn-primary btn-sm float-right" type="button" data-toggle="modal" data-target="#addEmployee" style="background: rgb(111,66,193);">Add Employee</button>
+                    
                     <h3 class="text-dark mb-4">Employee List</h3>
                     <div class="card shadow">
                         <div class="card-header py-3" style="background: var(--purple);">
@@ -322,11 +327,7 @@ if(isset($_POST['empDelete'])){
                             </div>
                             <div class="form-row">
                                 <div class="col-xl-4">
-                                    <div class="form-group"><label for="placeassignment"><strong>Place of Assignment</strong></label><select class="form-control" name="placeassignment">
-                                            <option value="Administrative Position" selected="">Administrative Position</option>
-                                            <option value="Faculty Position">Faculty Position</option>
-                                            <option value="Executive Position'">Executive Position'</option>
-                                        </select></div>
+                                    <div class="form-group"><label for="placeassignment"><strong>Place of Assignment</strong></label><input class="form-control" type="text" name="placeassignment"></div>
                                 </div>
                                 <div class="col-xl-4 offset-xl-0">
                                     <div class="form-group"><label for="gender"><strong>Status of Employment</strong></label><select class="form-control" name="statusemployment">
@@ -345,7 +346,8 @@ if(isset($_POST['empDelete'])){
                                         </select></div>
                                 </div>
                                 </div>
-                                <div class="modal-footer"><button class="btn btn-primary" name="submit" type="submit">Submit</button><button class="btn btn-danger" type="button" data-dismiss="modal">Close</button></div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" name="submit" type="submit">Submit</button><button class="btn btn-danger" type="button" data-dismiss="modal">Close</button></div>
                             </form>
                     </div>
                 </div>
@@ -385,6 +387,14 @@ if(isset($_POST['empDelete'])){
             });
     } );
     </script>
+
+<?php
+    }else
+    {
+        header("Location: login.php");
+        exit();
+    }
+    ?>
 </body>
 
 </html>

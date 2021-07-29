@@ -36,6 +36,7 @@
                     $row = mysqli_fetch_assoc($result);
                     if ($row['username'] === $username && $row['pass'] === $password)
                     {
+                        $_SESSION['Name'] = $row['Name'];
                         $_SESSION['username'] = $row['username'];
                         $_SESSION['user_id'] = $row['user_id'];
                         header("Location: dashboard.php");

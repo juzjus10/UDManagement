@@ -1,17 +1,21 @@
 <?php
 require_once('NewDB.php');
+
 $mysqli = new mysqli($server,$user,$pass,$db);
 //Employee No. from dashboard.php
     session_start();  
 
-    $employeeNo = $_SESSION["employeeNo"];
+    if (empty($_SESSION["employeeNo"])){
+        $employeeNo = 'EMP001';
+    } else {
+        $employeeNo = $_SESSION["employeeNo"];
+    }
+    
     $resultsem = $mysqli->query("SELECT * FROM seminars where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
     $resulttra = $mysqli->query("SELECT * FROM training where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
     $image = $mysqli->query("SELECT image FROM employee where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
     $image = mysqli_fetch_array($image);
-    if (empty($employeeNo)){
-        $employeeNo = 'EMP001';
-     }
+   
    
     function fetch_data($mysqli, $employeeNo) {
         $sql = "SELECT * FROM `employee` 
@@ -19,6 +23,8 @@ $mysqli = new mysqli($server,$user,$pass,$db);
         INNER JOIN `seminars` ON `seminars`.`Employee_No` = `employee`.`Employee_No`
         INNER JOIN `training` ON `training`.`Employee_No` = `employee`.`Employee_No`
         INNER JOIN `employment_history` ON `employment_history`.`Employee_No` = `employee`.`Employee_No`
+        INNER JOIN `position` ON `position`.`position_code` = `employment_history`.`position_code`
+        INNER JOIN `employ_status` ON `employ_status`.`Status_of_Employ_Code` = `employment_history`.`Status_of_Employ_Code` 
         WHERE `employee`.`Employee_No` =  '$employeeNo'";
         $result =  $mysqli->query($sql) or die(mysqli_error($mysqli));
         return  mysqli_fetch_array($result);
@@ -159,7 +165,7 @@ if(isset($_POST['semDelete'])){
                     <a class="nav-link" href="payroll.php"><i class="fa fa-credit-card-alt"></i><span>Payroll</span></a>
                     <a class="nav-link active" href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="login.php"><i class="far fa-user-circle"></i><span>Login</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout_process.php"><i class="far fa-user-circle"></i><span>Logout</span></a></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
@@ -173,9 +179,9 @@ if(isset($_POST['semDelete'])){
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars" style="color: rgb(255,255,255);"></i></button>
                         <ul class="navbar-nav flex-nowrap ml-auto">
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small" style="color: rgb(255,255,255) !important;">Admin</span><img class="border rounded-circle img-profile" src="assets/img/dogs/image2.jpeg"></a>
-                                    <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small" style="color: rgb(255,255,255) !important;"><?php echo $_SESSION['Name'] ?></span><img class="border rounded-circle img-profile" src="assets/img/dogs/image2.jpeg"></a>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="profile.php"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="logout_process.php"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
                                 </div>
                             </li>
@@ -453,25 +459,20 @@ if(isset($_POST['semDelete'])){
                                         </div>
                                         <div class="form-group">
                                             <div class="form-row">    
-                                                <div class="col-xl-4"> <label for="placeassignment"><strong>Place of Assignment</strong></label><select required class="form-control" value = "<?php echo $row['Place_of_Assignment'] ?> " placeholder="<?php echo $row['Place_of_Assignment'];?>"name="placeassignment">
-                                                        <option value="<?php echo $row['Place_of_Assignment'];?>"  selected><?php echo $row['Place_of_Assignment'];?></option>
-                                                        <option value=""disabled>Select:</option>
-                                                        <option value="Administrative Position">Administrative Position</option>
-                                                        <option value="Faculty Position">Faculty Position</option>
-                                                        <option value="Executive Position'">Executive Position'</option>
-                                                </select></div>
+                                                <div class="col-xl-4"> <label for="placeassignment"><strong>Place of Assignment</strong></label><input class="form-control" type="text" value = "<?php echo $row['Place_of_Assignment'] ?> "placeholder="<?php echo $row['Place_of_Assignment'];?>" name="placeassignment" ></div>
+
                                                 <div class="col-xl-4 offset-xl-0"><label for="gender"><strong>Status of Employment</strong></label><select class="form-control" value = "<?php echo $row['Status_of_Employ_Code'] ?> "placeholder="<?php echo $row['Status_of_Employ_Code'];?>" name="statusemployment">
-                                                        <option value="<?php echo $row['Status_of_Employ_Code'];?>" selected><?php echo $row['Status_of_Employ_Code'];?></option>
+                                                        <option value="<?php echo $row['Status_of_Employ_Code'];?>" selected><?php echo $row['ES_Description'];?></option>
                                                         <option value=""disabled>Select:</option>
-                                                        <option value="RegEmp" selected="">Regular Employment</option>
+                                                        <option value="RegEmp">Regular Employment</option>
                                                         <option value="ExtemEmp">Extended Temporary Employment</option>
                                                         <option value="PtimeEmp">Part Time Employment</option>
                                                         <option value="TempEmp">Temporary Employment</option>
                                                         <option value="OnCallEmp">On-Call Employment</option>
                                                 </select></div>
                                                 <div class="col-xl-4 offset-xl-0">
-                                                    <div class="form-group"><label for="gender"><strong>Position</strong></label><select class="form-control" value = "<?php echo $row['Position_Code'] ?> "placeholder="<?php echo $row['Position_Code'];?>" name="placeposition">
-                                                        <option value="<?php echo $row['Position_Code'];?>"selected><?php echo $row['Position_Code'];?></option>
+                                                    <div class="form-group"><label for="gender"><strong>Position</strong></label><select class="form-control" value = "<?php echo $row['Position_Code'] ?> "placeholder="<?php echo $row['Pos_Description'];?>" name="placeposition">
+                                                        <option value="<?php echo $row['Position_Code'];?>"selected><?php echo $row['Pos_Description'];?></option>
                                                         <option value=""disabled>Select:</option>
                                                         <option value="AP">Administrative Position</option>
                                                         <option value="FP">Faculty Position</option>
@@ -509,6 +510,7 @@ if(isset($_POST['semDelete'])){
             document.getElementById("uploadPicture").submit();
         };
     </script>
+
 </body>
 
 </html>
