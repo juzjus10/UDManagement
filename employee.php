@@ -1,5 +1,7 @@
 <?php
-require_once('NewDB.php');
+require_once('index.php');
+require_once('includes/NewDB.php');
+require_once('templates/header.php');
 
 session_start();
     if(isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
@@ -73,25 +75,15 @@ if(isset($_POST['empDelete'])){
     //echo $query;
      $mysqli->query($query)or die(mysqli_error($mysqli));
  }
-?>
+
+ ?>
+
 
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Table - UDManagement</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
-
-   
+<?php include("templates/header.php");?>
 </head>
 
 <body id="page-top">
@@ -103,7 +95,7 @@ if(isset($_POST['empDelete'])){
                 <div class="container-fluid">
                     <button class="btn btn-primary btn-sm float-right" type="button" data-toggle="modal" data-target="#addEmployee" style="background: rgb(111,66,193);">Add Employee</button>
                     
-                    <h3 class="text-dark mb-4">Employee List</h3>
+                    <h3 class="text-dark mb-4">Seminar List</h3>
                     <div class="card shadow">
                         <div class="card-header py-3" style="background: var(--purple);">
                             <p class="text-primary m-0 font-weight-bold" style="color: rgb(247,247,247)!important;">Employee Info</p>
@@ -233,21 +225,11 @@ if(isset($_POST['empDelete'])){
                                 <div class="form-row">
                                     <div class="col-xl-6">
                                         <div class="form-group"><label for="degree"><strong>Degree</strong></label><select class="form-control" name="degree">
-                                                <option value="MAED">Master of Arts in Education</option>
-                                                <option value="DCS">Doctor of Computer Science</option>
-                                                <option value="MA-PHIL">Master of Arts in Philosopy</option>
-                                                <option value="MSCS">Master of Science in Computer Science</option>
-                                                <option value="PhD">Doctor of Philosopy</option>
-                                                <option value="PhD Comm">Doctor of Philosopy in Communication</option>
-                                                <option value="MM">Master of Management</option>
-                                                <option value="DPA">Doctor of Public Administration</option>
-                                                <option value="MIT">Master in Information Technology</option>
-                                                <option value="BLIS">Bachelor of Library and Information Science</option>
-                                                <option value="BSBA">Bachelor of Science in Business Administration</option>
-                                                <option value="BSN">Bachelor of Science in Nursing</option>
-                                                <option value="MSN">Masters of Science in Nursing</option>
-                                                <option value="MD">Doctor of Medicine</option>
-                                                <option value="BSOA">Bachelor of Science in Office Administration</option>
+                                        <?php
+                                            $degreeSelect = $mysqli->query("SELECT * FROM degree ORDER BY Degree_Description ASC;") or die(mysqli_error($mysqli));
+                                            while ($rows = $degreeSelect->fetch_assoc()):{?>
+                                                <option value="<?php echo $rows['Degree_Code'];?>"><?php echo $rows['Degree_Description'];?></option>    
+                                        <?php }endwhile?>
                                             </select></div>
                                     </div>
                                     <div class="col-xl-6 offset-xl-0"><label for="schoolgraduated"><strong>School Graduated</strong><br></label><input class="form-control" type="text" id="first_name-1" placeholder="Philippine Christian University" name="schoolgraduated"></div>
@@ -274,11 +256,11 @@ if(isset($_POST['empDelete'])){
                                     <h5 style="color: var(--purple);font-family: Nunito, sans-serif;"><strong>Training</strong></h5>
                                 </section>
                                 <div class="form-row">
-                                    <div class="col"><label for="trainingname">Training Name</label><input class="form-control" type="text" name="trainingname"></div>
-                                    <div class="col"><label for="trainingdate">Date Completed</label><input class="form-control" type="date" name="trainingdate"></div>
-                                    <div class="col"><label for="traininghours">No. of Hours</label><input class="form-control" type="number" name="traininghours"></div>
+                                    <div class="col-x1-4"><label for="trainingname">Training Name</label><input class="form-control" type="text" name="trainingname"></div>
+                                    <div class="col-x1-4"><label for="traininghours">No. of Hours</label><input class="form-control" type="number" name="traininghours"></div>
                                 </div>
                                 <div class="form-row">
+                                    <div class="col-x1-4"><label for="trainingdate">Date Completed</label><input class="form-control" type="date" name="trainingdate"></div>
                                     <div class="col-xl-4"><label for="trainingdays">No. of Days</label><input class="form-control" type="number" name="trainingdays"></div>
                                 </div>
                                 <hr>

@@ -1,19 +1,14 @@
 <?php 
-    require_once  "NewDB.php";
+    require_once('includes/NewDB.php');
+    include("includes/login_process.php");
+    require_once('index.php');
+    require_once('templates/header.php');
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Login - UDManagement</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+<?php include("templates/header.php");?>
 </head>
 
 <body class="bg-gradient-primary" style="background: rgb(41,45,59);">
@@ -31,7 +26,8 @@
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Welcome to UDManagement</h4>
                                     </div>
-                                    <form class="user" action = "login_process.php" method = "POST">
+                                   
+                                    <form class="user" action = "" method = "POST">
                                         <?php
                                             if(isset($_GET['error'])){?>
                                                 <p class = "text-center"> <?php echo $_GET['error'];?></p>

@@ -1,4 +1,7 @@
 <?php 
+require_once('index.php');
+require_once('includes/NewDB.php');
+require_once('templates/header.php');
 session_start();
 if(isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 ?>
@@ -6,19 +9,7 @@ if(isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Paylist - UDManagement</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    
- 
+<?php include("templates/header.php");?>
 </head>
 
 <body id="page-top">
@@ -49,8 +40,8 @@ if(isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                                     </thead>
                                     <tbody>
                                         <?php
-                                    $connect = mysqli_connect("localhost", "root", "");
-                                    $db = mysqli_select_db($connect, 'human_resources2.0');
+                                    
+                                    $db = mysqli_select_db($conn, 'human_resources2.0');
                                     
                                         if(isset($_POST['search']))
                                         {
@@ -58,7 +49,7 @@ if(isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                                             $fname = $_POST['firstname'];
                             
                                             $query = "SELECT * FROM payroll_vw WHERE LastName = '$lname' OR  FirstName = '$fname'";
-                                            $result = mysqli_query($connect, $query);
+                                            $result = mysqli_query($conn, $query);
                                             $resultCheck = mysqli_num_rows($result);
                                             if ($resultCheck > 0)
                                             {
@@ -80,7 +71,7 @@ if(isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                                         else
                                         {
                                             $query = "SELECT * FROM payroll_vw";
-                                            $result = mysqli_query($connect, $query);
+                                            $result = mysqli_query($conn, $query);
                                             $resultCheck = mysqli_num_rows($result);
                                             if ($resultCheck > 0)
                                             {

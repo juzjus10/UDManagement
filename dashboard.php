@@ -1,36 +1,24 @@
 <?php
+   require_once('index.php');
+   require_once('includes/NewDB.php');
+   require_once('templates/header.php');
     session_start();
     if(isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
-    $dbServerName = "localhost";
-    $dbUsername = "root";
-    $dbPassword = "";
-    $dbName = "human_resources2.0";
-    $conn = mysqli_connect($dbServerName, $dbUsername, $dbPassword, $dbName); 
-    
-    $sql_count = "SELECT COUNT('Employee No.') AS num FROM vw_headcount";
-	$result_count = mysqli_query($conn, $sql_count);
-	$values_count = mysqli_fetch_assoc($result_count);
-    $num_rows = $values_count['num'];
-
-    $sql_sum = "SELECT SUM(PayRate) AS salary FROM payroll_vw";
-    $result_sum = mysqli_query($conn, $sql_sum);
-	$values_sum = mysqli_fetch_assoc($result_sum);
-    $total_salary = $values_sum['salary'];
+        $sql_count = "SELECT COUNT('Employee No.') AS num FROM vw_headcount";
+        $result_count = mysqli_query($conn, $sql_count);
+        $values_count = mysqli_fetch_assoc($result_count);
+        $num_rows = $values_count['num'];
+        $sql_sum = "SELECT SUM(PayRate) AS salary FROM payroll_vw";
+        $result_sum = mysqli_query($conn, $sql_sum);
+        $values_sum = mysqli_fetch_assoc($result_sum);
+        $total_salary = $values_sum['salary'];
     
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - UDManagement</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+<?php include("templates/header.php");?>
 </head>
 
 <body id="page-top">

@@ -6,17 +6,16 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link active" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="employee.php"><i class="fas fa-table"></i><span>Employees</span></a><a class="nav-link" href="payroll.php"><i class="fa fa-credit-card-alt"></i><span>Payroll</span></a><a class="nav-link" href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout_process.php"><i class="far fa-user-circle"></i><span>Logout</span></a></li> 
-                    <li class="nav-item has-submenu">
-                    </li><li class="nav-item">
-                                <div><a class="btn btn-link nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button"><i class="fas fa-cog"></i>&nbsp;<span>Components</span></a>
+                   <li class="nav-item">
+                                <div><a class="btn btn-link nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button"><i class="fas fa-cog"></i>&nbsp;<span>Views</span></a>
                                     <div class="collapse show" id="collapse-1" >
                                         <div class="bg-white border rounded py-2 collapse-inner">
-                                            <h6 class="collapse-header">Other Views:</h6><a class="collapse-item" href="buttons.html">Buttons</a><a class="collapse-item" href="cards.html">Cards</a>
+                                            <a class="collapse-item" href="educational_attainment.php">Educational Attainment</a><a class="collapse-item" href="seminar.php">Seminars</a><a class="collapse-item" href="training.php">Training</a><a class="collapse-item" href="employeehistory.php">Employee History</a>
                                         </div>
                                     </div>
                                 </div>
-                            </li>          
+                            </li>  
+                    <li class="nav-item"><a class="nav-link" href="logout_process.php"><i class="far fa-user-circle"></i><span>Logout</span></a></li>         
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>

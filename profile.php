@@ -1,5 +1,7 @@
 <?php
-require_once('NewDB.php');
+require_once('index.php');
+require_once('includes/NewDB.php');
+require_once('templates/header.php');
 
 $mysqli = new mysqli($server,$user,$pass,$db);
 //Employee No. from dashboard.php
@@ -11,145 +13,13 @@ $mysqli = new mysqli($server,$user,$pass,$db);
         $employeeNo = $_SESSION["employeeNo"];
     }
     
-    $resultsem = $mysqli->query("SELECT * FROM seminars where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
-    $resulttra = $mysqli->query("SELECT * FROM training where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
-    $image = $mysqli->query("SELECT image FROM employee where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
-    $image = mysqli_fetch_array($image);
-   
-   
-    function fetch_data($mysqli, $employeeNo) {
-        $sql = "SELECT * FROM `employee` 
-        INNER JOIN `educ_attainment` ON `educ_attainment`.`Employee_No` = `employee`.`Employee_No` 
-        INNER JOIN `seminars` ON `seminars`.`Employee_No` = `employee`.`Employee_No`
-        INNER JOIN `training` ON `training`.`Employee_No` = `employee`.`Employee_No`
-        INNER JOIN `employment_history` ON `employment_history`.`Employee_No` = `employee`.`Employee_No`
-        INNER JOIN `position` ON `position`.`position_code` = `employment_history`.`position_code`
-        INNER JOIN `employ_status` ON `employ_status`.`Status_of_Employ_Code` = `employment_history`.`Status_of_Employ_Code` 
-        WHERE `employee`.`Employee_No` =  '$employeeNo'";
-        $result =  $mysqli->query($sql) or die(mysqli_error($mysqli));
-        return  mysqli_fetch_array($result);
-    
-    }
-    
-    $row = fetch_data ($mysqli, $employeeNo);
-//Update Employee
-if (isset($_POST['UpEmp'])){
-    $lastname = $_POST['lastname'];
-    $firstname = $_POST['firstname'];
-    $middlename = $_POST['middlename'];
-    $address = $_POST['address'];
-    $email = $_POST['email'];
-    $birthdate = $_POST['birthdate'];
-    $gender = $_POST['gender'];
-    
-    $mysqli->query("UPDATE employee SET Employee_No='$employeeNo', LastName='$lastname', FirstName='$firstname', MiddleName='$middlename', 
-        Address='$address', Email='$email', Birthday='$birthdate', Gender='$gender' WHERE Employee_No='$employeeNo'") or 
-        die($mysqli->error);
-    $_SESSION['message'] = "Employee has been employee table updated!";
-    $_SESSION['msg_type'] = "Warning!";
-    $row = fetch_data ($mysqli, $employeeNo);
-    
-}
-
-//Update Education Attainment
-if (isset($_POST['UpEdu'])){
-    $degree = $_POST['degree'];
-    $schoolgraduated = $_POST['schoolgraduated'];
-    $yeargraduated = $_POST['yeargraduated']; 
-
-    $mysqli->query("UPDATE educ_attainment SET Employee_No='$employeeNo', Degree_Code='$degree', School_Graduated='$schoolgraduated', 
-    Year_Graduated='$yeargraduated' WHERE Employee_No='$employeeNo'") or 
-        die($mysqli->error);
-   
-    $row = fetch_data ($mysqli, $employeeNo);
-    
-}
-//Update Seminars
-if (isset($_POST['UpSem'])){
-    $seminarname = $_POST['seminarname'];
-    $seminardate = $_POST['seminardate'];
-    $seminarhour = $_POST['seminarhour']; 
-    $seminardays = $_POST['seminardays']; 
-
-    $mysqli->query("INSERT INTO seminars(Employee_No,Seminar_Name, Sem_Date_Completed, Sem_No_of_Hours, Sem_No_of_Days) 
-    VALUES ('$employeeNo','$seminarname','$seminardate', '$seminarhour' , '$seminardays')") or 
-        die($mysqli->error);
-    $row = fetch_data ($mysqli, $employeeNo);
-    $resultsem = $mysqli->query("SELECT * FROM seminars where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
-
-    
-}
-//Update Training
-if (isset($_POST['UpTra'])){
-    $trainingname = $_POST['trainingname'];
-    $trainingdate = $_POST['trainingdate'];
-    $trainingdays = $_POST['trainingdays']; 
-    $traininghours = $_POST['traininghours']; 
-
-    $mysqli->query("INSERT INTO training(Employee_No,Training_Name, Tra_Date_Completed, Tra_No_of_Hours, Tra_No_of_Days) 
-    VALUES ('$employeeNo','$trainingname', '$trainingdate', '$traininghours', '$trainingdays');") or 
-        die($mysqli->error);
-
-    $row = fetch_data ($mysqli, $employeeNo);
-    $resulttra = $mysqli->query("SELECT * FROM training where Employee_No = '$employeeNo';") or die(mysqli_error($mysqli));
-
-}
-
-//Update EMPLOYMENT HISTORY
-
-if (isset($_POST['UpEmh'])){
-    $itemNo = $_POST['itemNo'];
-    $salarygrade = $_POST['salarygrade'];
-    $stepid = $_POST['stepID'];
-    $startdate = $_POST['startdate']; 
-    $enddate = $_POST['enddate'];
-    $placeassignment = $_POST['placeassignment'];
-    $statusemployment = $_POST['statusemployment']; 
-    $placeposition = $_POST['placeposition']; 
-
-    $mysqli->query("UPDATE employment_history SET Employee_No='$employeeNo', Item_No='$itemNo', Salary_Grade='$salarygrade', 
-    Step_ID='$stepid', Start_Date='$startdate', End_Date='$enddate', Place_of_Assignment='$placeassignment', Status_of_Employ_Code='$statusemployment'
-    , Position_Code='$placeposition' WHERE Employee_No='$employeeNo'") or 
-        die($mysqli->error);
-    $_SESSION['message'] = "Employee has been employee table updated!";
-    $_SESSION['msg_type'] = "Warning!";
-    $row = fetch_data ($mysqli, $employeeNo);
- 
-}
-
-if(isset($_POST['semDelete'])){
-    
-    $semDelete =  $_POST['semDelete'];
-
-    $query = "DELETE FROM Seminars WHERE Seminar_Name = '$semDelete' and Employee_No ='$employeeNo'";
-    //echo $query;
-    $mysqli->query($query)or die(mysqli_error($mysqli));
-    header("Location: profile.php");
- }
-
- if(isset($_POST['traDelete'])){
-    
-    $traDelete =  $_POST['traDelete'];
-
-    $query = "DELETE FROM Training WHERE Training_Name = '$traDelete' and Employee_No ='$employeeNo'";
-    //echo $query;
-    $mysqli->query($query)or die(mysqli_error($mysqli));
-    header("Location: profile.php");
- }
+    include("includes/profile_process.php");
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Profile - UDManagement</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+<?php include("templates/header.php");?>
 </head>
 
 <body id="page-top">
@@ -157,7 +27,7 @@ if(isset($_POST['semDelete'])){
     <?php include("templates/sidebar.php");?>
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
-                <?php include("templates/navbar.php");?>
+            <?php include("templates/navbar.php");?>
                 <div class="container-fluid">
                     <h3 class="text-dark mb-4">Profile</h3>
                     <div class="row mb-3">
@@ -264,36 +134,73 @@ if(isset($_POST['semDelete'])){
                                                     <div class="form-row">
                                                         <div class="col-xl-6">
                                                             <div class="form-group"><label for="degree"><strong>Degree</strong></label><select class="form-control" value = "<?php echo $row['Degree_Code'] ?> "placeholder="<?php echo $row['Degree_Code'];?>" name="degree">
-                                                                    <option value="<?php echo $row['Degree_Code'];?>"  selected><?php echo $row['Degree_Code'];?></option>                                                               
-                                                                    <option value="MAED" >Master of Arts in Education</option>
-                                                                    <option value="DCS">Doctor of Computer Science</option>
-                                                                    <option value="MA-PHIL">Master of Arts in Philosopy</option>
-                                                                    <option value="MSCS">Master of Science in Computer Science</option>
-                                                                    <option value="PhD">Doctor of Philosopy</option>
-                                                                    <option value="PhD Comm">Doctor of Philosopy in Communication</option>
-                                                                    <option value="MM">Master of Management</option>
-                                                                    <option value="DPA">Doctor of Public Administration</option>
-                                                                    <option value="MIT">Master in Information Technology</option>
-                                                                    <option value="BLIS">Bachelor of Library and Information Science</option>
-                                                                    <option value="BSBA">Bachelor of Science in Business Administration</option>
-                                                                    <option value="BSN">Bachelor of Science in Nursing</option>
-                                                                    <option value="MSN">Masters of Science in Nursing</option>
-                                                                    <option value="MD">Doctor of Medicine</option>
-                                                                    <option value="BSOA">Bachelor of Science in Office Administration</option>
+                                                                    <option value="Select:" selected disabled>Select:</option>                                                               
+                                                                    <option value="UG" >Undergrad</option>
+                                                                    <option value="BS">Bachelor of Science</option>
+                                                                    <option value="BA">Bachelor of Arts</option>
+                                                                    <option value="M">Masters</option>
+                                                                    <option value="D">Doctorate</option>
+                                                                    <option value="A">Associate</optio>
                                                                 </select></div>
                                                         </div>
-                                                        <div class="col-xl-6 offset-xl-0"><label for="schoolgraduated"><strong>School Graduated</strong><br></label><input class="form-control" type="text" id="first_name-1" value = "<?php echo $row['School_Graduated']; ?> "placeholder="<?php echo $row['School_Graduated'];?>" name="schoolgraduated"></div>
                                                     </div>
+                                                    <div class="form-row">
+                                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpDeg">Next&nbsp;</button></div>
+                                                        </div>
                                                     <div class="form-row" style="border-bottom-color: rgb(133, 135, 150);">
+                                                    <div class="col-xl-6">
+                                                        <div class="form-group"><label for="course"><strong>Course</strong></label><select class="form-control" name="course">
+                                                            <?php
+                                                                while ($rows = $resultdeg->fetch_assoc()):{?>
+                                                                
+                                                                    <option value="<?php echo $rows['Degree_Description'];?>"><?php echo $rows['Degree_Description'];?></option>
+                                                                
+                                                             <?php }endwhile?>
+                                                             </select></div>
+                                                        </div>
+                                                        <div class="col-xl-6 offset-xl-0"><label for="schoolgraduated"><strong>School Graduated</strong><br></label><input class="form-control" type="text" id="first_name-1" value = "<?php echo $row['School_Graduated']; ?> "placeholder="<?php echo $row['School_Graduated'];?>" name="schoolgraduated"></div>
+                                                   
                                                         <div class="col-xl-3">
                                                             <div class="form-group"><label for="yeargraduated"><strong>Year Graduated</strong></label><input class="form-control" type="number" min="1900" value = "<?php echo $row['Year_Graduated'];?>" placeholder="<?php echo $row['Year_Graduated'];?>" name="yeargraduated"></div>
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
-                                                        <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpEdu">Save&nbsp;</button></div>
+                                                        <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpEdu">Add&nbsp;</button></div>
                                                     </div>
                                                 </div>
                                             </form>
+                                            <div class="card-body">
+                                                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                                    <table id="educ_attainment" class="table my-0" >
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Degree</th>
+                                                            <th>School Graduated</th>
+                                                            <th>Year Graduated</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                        
+                                                        <tbody>
+                                                    <?php
+                                                    
+                                                    while ($rows = $resulteduc->fetch_assoc()):?>
+                                                
+                                                        <tr>
+                                                            
+                                                            <td><?php echo $rows['Degree_Description'];?></td>
+                                                            <td><?php echo $rows['Year_Graduated'];?></td>
+                                                            <td><?php echo $rows['School_Graduated'];?></td>
+                                                            <td><form action="" method="post">
+                                                            <input type="hidden" name="yrDelete" value="<?php echo $rows['Year_Graduated'];?>">    
+                                                            <button class="btn btn-circle btn-danger" name="educDelete" type="submit"  value="<?php echo $rows['Degree_Code'];?>"><i class="far fa-trash-alt"></i></button>
+                                                        </form></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    <?php endwhile ?>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -452,9 +359,52 @@ if(isset($_POST['semDelete'])){
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" name="UpEmh" type="submit">Save&nbsp;</button></div>
+                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" name="UpEmh" type="submit">Add&nbsp;</button></div>
                                         </div>
                                     </form>
+                                    <div class="card-body">
+                                        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                            <table id="employment_history" class="table my-0" >
+                                                <thead>
+                                                <tr>
+                                                    <th>Item No.</th>
+                                                    <th>Salary Grade</th>
+                                                    <th>Step ID</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Place Assignment</th>
+                                                    <th>Status Employment</th>
+                                                    <th>Position</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                
+                                                <tbody>
+                                            <?php
+                                            
+                                            while ($rows = $resultemh->fetch_assoc()):?>
+                                        
+                                                <tr>
+                                                    
+                                                    <td><?php echo $rows['Item_No'];?></td>
+                                                    <td><?php echo $rows['Salary_Grade'];?></td>
+                                                    <td><?php echo $rows['Step_ID'];?></td>
+                                                    <td><?php echo $rows['Start_Date'];?></td>
+                                                    <td><?php echo $rows['End_Date'];?></td>
+                                                    <td><?php echo $rows['Place_of_Assignment'];?></td>
+                                                    <td><?php echo $rows['ES_Description'];?></td>
+                                                    <td><?php echo $rows['Pos_Description'];?></td>
+                                                    <td><form action="" method="post">
+                                                    <input type="hidden" name="startDateDelete" value="<?php echo $rows['Start_Date'];?>">    
+                                                    <input type="hidden" name="endDateDelete" value="<?php echo $rows['End_Date'];?>">    
+                                                    <button class="btn btn-circle btn-danger" name="emhDelete" type="submit"  value="<?php echo $rows['Item_No'];?>"><i class="far fa-trash-alt"></i></button>
+                                                </form></td>
+                                                </tr>
+                                                </tbody>
+                                            <?php endwhile ?>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

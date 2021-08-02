@@ -1,7 +1,6 @@
 <?php
     header('Content-Type: application/json');
-    require_once('NewDB.php');
-    $conn = new mysqli($server,$user,$pass,$db);
+    require_once('includes/NewDB.php');
     
     $query = "SELECT `Position`, COUNT(`Position`)  AS position_count  FROM `employee_info_vw`  GROUP BY `position`";
     $result= mysqli_query($conn, $query);

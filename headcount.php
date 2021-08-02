@@ -1,16 +1,10 @@
 <?php
+ 	require_once('includes/NewDB.php');
 	$query = "SELECT * FROM `vw_headcount`";
-    $search_result = filterTable($query);
+    $search_result = filterTable($query,$conn);
 
-	function filterTable($query){
-	    $dbServerName = "localhost";
-		$dbUsername = "root";
-		$dbPassword = "";
-		$dbName = "human_resources2.0";
-
-		$connect = mysqli_connect($dbServerName, $dbUsername, $dbPassword, $dbName); 
-
-	    $filter_Result = mysqli_query($connect, $query);
+	function filterTable($query,$conn){
+	    $filter_Result = mysqli_query($conn, $query);
 	    return $filter_Result;
 	}
 ?>
@@ -24,12 +18,7 @@
 </head>
 <body onload="window.print()">
 	<?php 
-		$dbServerName = "localhost";
-		$dbUsername = "root";
-		$dbPassword = "";
-		$dbName = "human_resources2.0";
-
-		$conn = mysqli_connect($dbServerName, $dbUsername, $dbPassword, $dbName); 
+		
 		$sql = "SELECT COUNT('Employee No.') AS num FROM vw_headcount";
 		$result = mysqli_query($conn, $sql);
 		$values = mysqli_fetch_assoc($result);
