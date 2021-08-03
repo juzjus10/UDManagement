@@ -225,6 +225,7 @@ if(isset($_POST['empDelete'])){
                                 <div class="form-row">
                                     <div class="col-xl-6">
                                         <div class="form-group"><label for="degree"><strong>Degree</strong></label><select class="form-control" name="degree">
+                                        <option value="" selected disabled>Select:</option>
                                         <?php
                                             $degreeSelect = $mysqli->query("SELECT * FROM degree ORDER BY Degree_Description ASC;") or die(mysqli_error($mysqli));
                                             while ($rows = $degreeSelect->fetch_assoc()):{?>
@@ -288,7 +289,8 @@ if(isset($_POST['empDelete'])){
                                 </div>
                                 <div class="col-xl-4 offset-xl-0">
                                     <div class="form-group"><label for="gender"><strong>Status of Employment</strong></label><select class="form-control" name="statusemployment">
-                                            <option value="RegEmp" selected="">Regular Employment</option>
+                                            <option value="" selected disabled>Select:</option>
+                                            <option value="RegEmp">Regular Employment</option>
                                             <option value="ExtemEmp">Extended Temporary Employment</option>
                                             <option value="PtimeEmp">Part Time Employment</option>
                                             <option value="TempEmp">Temporary Employment</option>
@@ -296,11 +298,15 @@ if(isset($_POST['empDelete'])){
                                         </select></div>
                                 </div>
                                 <div class="col-xl-4 offset-xl-0">
-                                    <div class="form-group"><label for="gender"><strong>Position</strong></label><select class="form-control" name="placeposition">
-                                            <option value="AP" selected="">Administrative Position</option>
-                                            <option value="FP">Faculty Position</option>
-                                            <option value="EP">Executive Position</option>
-                                        </select></div>
+                                    <div class="form-group"><label for="gender"><strong>Position</strong></label><select class="form-control" value = "<?php echo $row['Position_Code'] ?> "placeholder="<?php echo $row['Pos_Description'];?>" name="placeposition">
+                                                    <option value="" selected disabled>Select:</option>
+                                                    <?php
+                                                    $posSelect = $mysqli->query("SELECT * FROM position ORDER BY Pos_Description ASC;") or die(mysqli_error($mysqli));
+                                                    
+                                                    while ($rows = $posSelect->fetch_assoc()):{?>
+                                                        <option value="<?php echo $rows['Position_Code'];?>"><?php echo $rows['Pos_Description'];?></option>
+                                                    <?php }endwhile?>
+                                                    </select></div>
                                 </div>
                                 </div>
                                 <div class="modal-footer">

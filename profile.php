@@ -118,7 +118,7 @@ $mysqli = new mysqli($server,$user,$pass,$db);
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpEmp">Save</button></div>
+                                                <div class="col d-xl-flex align-items-center justify-content-xl-end"><button class="btn btn-info btn-circle ml-1" role="button" type="submit" name="UpEmp"><i class="fas fa-save fa-lg"></i></i></button></div>
                                                 </div>
                                             </form>
                                         </div>
@@ -131,7 +131,7 @@ $mysqli = new mysqli($server,$user,$pass,$db);
                                             <form action="" method="POST">
                                                 <input type="hidden" name="employeeNo" value="<?php echo $row['Employee_No'];?>">
                                                 <div class="form-group">
-                                                    <div class="form-row">
+                                                    <div class="form-row align-items-center">
                                                         <div class="col-xl-6">
                                                             <div class="form-group"><label for="degree"><strong>Degree</strong></label><select class="form-control" value = "<?php echo $row['Degree_Code'] ?> "placeholder="<?php echo $row['Degree_Code'];?>" name="degree">
                                                                     <option value="Select:" selected disabled>Select:</option>                                                               
@@ -142,11 +142,12 @@ $mysqli = new mysqli($server,$user,$pass,$db);
                                                                     <option value="D">Doctorate</option>
                                                                     <option value="A">Associate</optio>
                                                                 </select></div>
+                                                              
                                                         </div>
+                                                        <div class="col d-xl-flex justify-content-xl"><button class="btn btn-circle btn-primary btn-m" type="submit" name="UpDeg"><i class="fas fa-angle-right fa-lg"></i></button>
+                                                            </div>
                                                     </div>
-                                                    <div class="form-row">
-                                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpDeg">Next&nbsp;</button></div>
-                                                        </div>
+                                                    
                                                     <div class="form-row" style="border-bottom-color: rgb(133, 135, 150);">
                                                     <div class="col-xl-6">
                                                         <div class="form-group"><label for="course"><strong>Course</strong></label><select class="form-control" name="course">
@@ -162,11 +163,11 @@ $mysqli = new mysqli($server,$user,$pass,$db);
                                                    
                                                         <div class="col-xl-3">
                                                             <div class="form-group"><label for="yeargraduated"><strong>Year Graduated</strong></label><input class="form-control" type="number" min="1900" value = "<?php echo $row['Year_Graduated'];?>" placeholder="<?php echo $row['Year_Graduated'];?>" name="yeargraduated"></div>
+                                                                    
                                                         </div>
+                                                        <div class="col d-xl-flex align-items-center justify-content-xl-end"><button class="btn btn-success btn-circle ml-1" role="button" type="submit" name="UpEdu"><i class="fas fa-plus text-white"></i></button></div>
                                                     </div>
-                                                    <div class="form-row">
-                                                        <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpEdu">Add&nbsp;</button></div>
-                                                    </div>
+                                                    
                                                 </div>
                                             </form>
                                             <div class="card-body">
@@ -225,9 +226,9 @@ $mysqli = new mysqli($server,$user,$pass,$db);
                                                 <div class="col-xl-6"><label for="seminardays">No. of Days</label><input class="form-control" type="text" onfocus="(this.type='number')" onblur="(this.type='text')" value = "<?php echo $row['Sem_No_of_Days'] ?> "placeholder="<?php echo $row['Sem_No_of_Days'];?>" name="seminardays"></div>
                                             </div>
                                         </div>
-                                        <div class="form-row">
-                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpSem">Add&nbsp;</button></div>
-                                        </div>
+                                      
+                                        <div class="col d-xl-flex align-items-center justify-content-xl-end"><button class="btn btn-success btn-circle ml-1" role="button" type="submit" name="UpSem"><i class="fas fa-plus text-white"></i></button></div>
+                                        
                                     </form>
                                     <div class="card-body">
                                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -278,9 +279,7 @@ $mysqli = new mysqli($server,$user,$pass,$db);
                                                    <div class="col-xl-6"><label for="trainingdays">No. of Days</label><input class="form-control" type="text" onfocus="(this.type='number')" onblur="(this.type='text')" value = "<?php echo $row['Tra_No_of_Days'] ?> "placeholder="<?php echo $row['Tra_No_of_Days'];?>" name="trainingdays"></div>  
                                             </div>
                                         </div>
-                                        <div class="form-row">
-                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" type="submit" name="UpTra">Add&nbsp;</button></div>
-                                        </div>
+                                        <div class="col d-xl-flex align-items-center justify-content-xl-end"><button class="btn btn-success btn-circle ml-1" role="button" type="submit" name="UpTra"><i class="fas fa-plus text-white"></i></button></div>
                                     </form>
                                     <div class="card-body">
                                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -349,18 +348,19 @@ $mysqli = new mysqli($server,$user,$pass,$db);
                                                 </select></div>
                                                 <div class="col-xl-4 offset-xl-0">
                                                     <div class="form-group"><label for="gender"><strong>Position</strong></label><select class="form-control" value = "<?php echo $row['Position_Code'] ?> "placeholder="<?php echo $row['Pos_Description'];?>" name="placeposition">
-                                                        <option value="<?php echo $row['Position_Code'];?>"selected><?php echo $row['Pos_Description'];?></option>
-                                                        <option value=""disabled>Select:</option>
-                                                        <option value="AP">Administrative Position</option>
-                                                        <option value="FP">Faculty Position</option>
-                                                        <option value="EP">Executive Position</option>
+                                                    <option value=""disabled>Select:</option>
+                                                    <option value="<?php echo $row['Position_Code'] ?> "" selected><?php echo $row['Pos_Description'] ?> </option>
+                                                    <?php
+                                                    $posSelect = $mysqli->query("SELECT * FROM position ORDER BY Pos_Description ASC;") or die(mysqli_error($mysqli));
+                                                    
+                                                    while ($rows = $posSelect->fetch_assoc()):{?>
+                                                        <option value="<?php echo $rows['Position_Code'];?>"><?php echo $rows['Pos_Description'];?></option>
+                                                    <?php }endwhile?>
                                                     </select></div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-row">
-                                            <div class="col d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm" name="UpEmh" type="submit">Add&nbsp;</button></div>
-                                        </div>
+                                        <div class="col d-xl-flex align-items-center justify-content-xl-end"><button class="btn btn-success btn-circle ml-1" role="button" type="submit" name="UpEmh"><i class="fas fa-plus text-white"></i></button></div>
                                     </form>
                                     <div class="card-body">
                                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
